@@ -1,0 +1,3 @@
+- Scripts
+  - health_logger.sh
+    - uses smartctl and memtester to monitor the hardware
