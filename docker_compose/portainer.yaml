@@ -1,0 +1,14 @@
+version: "3"
+services:
+  portainer:
+    container_name: Portainer
+    image: portainer/portainer
+    environment:
+    - PUID=1000
+    - PGID=1000
+    ports:
+      - "9000:9000"
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/pete/servu/data/portainer:/data

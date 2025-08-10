@@ -1,0 +1,24 @@
+
+services:
+  traefik:
+    container_name: Traefik
+    image: traefik:v2.11
+    restart: unless-stopped
+    command:
+      - --configFile=/home/pete/servu/configs/traefik.yml
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/pete/servu/configs/traefik.yml:/etc/traefik/traefik.yml
+      - /home/pete/servu/data/traefik/acme.json:/letsencrypt/acme.json
+    networks:
+      - web
+
+
+networks:
+  web:
+    external: true
+
