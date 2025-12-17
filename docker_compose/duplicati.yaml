@@ -10,8 +10,8 @@ services:
       - DUPLICATI__WEBSERVICE_PASSWORD=My_Duplicati
       - DUPLICATI__DISABLE_DB_ENCRYPTION=false
     volumes:
-      - /home/pete/Serversetup/configs/duplicati:/config
-      - /home/pete/Serversetup/data:/source
+      - /mnt/private/Serversetup/configs/duplicati:/config
+      - /mnt/private/Serversetup/data:/source
       - /mnt/router/serverbackups:/backups
     ports:
       - 8200:8200

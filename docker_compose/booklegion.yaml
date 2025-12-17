@@ -1,8 +1,6 @@
-version: "3.9"
-
 services:
   frontend:
-    image: lector:latest
+    image: lumilukko/lector:latest
     container_name: booklegion-lector
     depends_on:
       - backend
@@ -19,12 +17,27 @@ services:
     networks:
       - web
 
+  kindle:
+    image: lumilukko/kindlelector:latest
+    container_name: booklegion-kindlelector
+    depends_on:
+      - frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.booklegion-kindle.rule=Host(`kindle.lumilukonservu.duckdns.org`)"
+      - "traefik.http.routers.booklegion-kindle.entrypoints=websecure"
+      - "traefik.http.routers.booklegion-kindle.tls=true"
+      - "traefik.http.routers.booklegion-kindle.tls.certresolver=letsencrypt"
+      - "traefik.http.services.booklegion-kindle.loadbalancer.server.port=8000"
+    networks:
+      - web
+
   backend:
-    image: tribune_logistica:latest
+    image: lumilukko/tribune_logistica:latest
     container_name: booklegion-tribune_logistica
     volumes:
-      - /home/pete/Serversetup/data/booklegion:/app/data
-      - /home/pete/Serversetup/configs/booklegion:/app/config
+      - /mnt/private/Serversetup/data/booklegion:/data
+      - /mnt/private/Serversetup/configs/booklegion:/config
     labels:
       - "traefik.enable=true"
 

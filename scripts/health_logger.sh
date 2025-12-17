@@ -3,7 +3,7 @@
 MEMSIZE=${1:-100M}
 ITERATIONS=${2:-5}
 DEVICE="/dev/sda"
-LOGFILE="/home/pete/servu/scripts/health_check.log"
+LOGFILE="/mnt/private/servu/scripts/health_check.log"
 
 echo "results will be saved in $LOGFILE"
 
