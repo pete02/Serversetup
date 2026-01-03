@@ -16,25 +16,26 @@ services:
 
     networks:
       - web
+    restart: unless-stopped
 
-  kindle:
-    image: lumilukko/kindlelector:latest
-    container_name: booklegion-kindlelector
-    depends_on:
-      - frontend
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.booklegion-kindle.rule=Host(`kindle.lumilukonservu.duckdns.org`)"
-      - "traefik.http.routers.booklegion-kindle.entrypoints=websecure"
-      - "traefik.http.routers.booklegion-kindle.tls=true"
-      - "traefik.http.routers.booklegion-kindle.tls.certresolver=letsencrypt"
-      - "traefik.http.services.booklegion-kindle.loadbalancer.server.port=8000"
+  tribune_dictio:
+    image: lumilukko/tribune_dictio
+    container_name: booklegion-tribune_dictio
+    ports:
+      - 8888:8000
+    volumes:
+      - /mnt/private/Serversetup/data/audio:/voiceactors
+    devices:
+      - nvidia.com/gpu=all
+    restart: unless-stopped
     networks:
       - web
 
   backend:
     image: lumilukko/tribune_logistica:latest
     container_name: booklegion-tribune_logistica
+    depends_on:
+      - tribune_dictio
     volumes:
       - /mnt/private/Serversetup/data/booklegion:/data
       - /mnt/private/Serversetup/configs/booklegion:/config
@@ -53,7 +54,7 @@ services:
 
       # Internal backend port
       - "traefik.http.services.booklegion-backend.loadbalancer.server.port=8000"
-
+    restart: unless-stopped
     networks:
       - web
 
