@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: Oma2026#MongOpassRoot
+      MONGO_INITDB_DATABASE: unifi
+    volumes:
+      - /mnt/private/Serversetup/data/mongo/data:/data/db
+      - /mnt/private/Serversetup/data/mongo/init:/docker-entrypoint-initdb.d:ro
+
+
+      

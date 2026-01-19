@@ -3,7 +3,7 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     environment:
-      DOMAIN: "https://vault.lumilukonservu.duckdns.org"
+      DOMAIN: "https://vault.lumilukko.com"
     ports:
       - "7000:80"
     restart: unless-stopped
@@ -11,7 +11,7 @@ services:
       - /mnt/private/Serversetup/data/vaultwarden:/data
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.vaultwarden.rule=Host(`vault.lumilukonservu.duckdns.org`)"
+      - "traefik.http.routers.vaultwarden.rule=Host(`vault.lumilukko.com`)"
       - "traefik.http.routers.vaultwarden.tls=true"
       - "traefik.http.routers.vaultwarden.entrypoints=websecure"
       - "traefik.http.services.vaultwarden.loadbalancer.server.port=80"

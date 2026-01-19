@@ -8,7 +8,7 @@ services:
       - "traefik.enable=true"
 
       # Frontend router: everything except /api
-      - "traefik.http.routers.booklegion-frontend.rule=Host(`book.lumilukonservu.duckdns.org`)"
+      - "traefik.http.routers.booklegion-frontend.rule=Host(`book.lumilukko.com`)"
       - "traefik.http.routers.booklegion-frontend.entrypoints=websecure"
       - "traefik.http.routers.booklegion-frontend.tls=true"
       - "traefik.http.routers.booklegion-frontend.tls.certresolver=letsencrypt"
@@ -43,7 +43,7 @@ services:
       - "traefik.enable=true"
 
       # Backend router: /api/*
-      - "traefik.http.routers.booklegion-backend.rule=Host(`book.lumilukonservu.duckdns.org`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.booklegion-backend.rule=Host(`book.lumilukko.com`) && PathPrefix(`/api`)"
       - "traefik.http.routers.booklegion-backend.entrypoints=websecure"
       - "traefik.http.routers.booklegion-backend.tls=true"
       - "traefik.http.routers.booklegion-backend.tls.certresolver=letsencrypt"
