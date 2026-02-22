@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    network_mode: "bridge"
+    ports:
+      - "8096:8096"        # HTTP
+      - "8920:8920"        # HTTPS (optional)
+    volumes:
+      - /mnt/private/Serversetup/configs/jellyfin:/config           # Jellyfin config
+      - /mnt/private/Serversetup/data/jellyfin:/cache             # Jellyfin cache
+      - /mnt/private/private:/media             # Your downloaded videos
+    environment:
+      - JELLYFIN_PublishedServerUrl=http://localhost:8096
+    restart: unless-stopped
