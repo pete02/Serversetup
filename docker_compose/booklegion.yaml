@@ -6,7 +6,6 @@ services:
       - backend
     labels:
       - "traefik.enable=true"
-
       # Frontend router: everything except /api
       - "traefik.http.routers.booklegion-frontend.rule=Host(`book.lumilukko.com`)"
       - "traefik.http.routers.booklegion-frontend.entrypoints=websecure"
@@ -31,29 +30,48 @@ services:
     networks:
       - web
 
+  onboarder:
+    image: lumilukko/tribune_archivum:latest
+    container_name: tribune_archivum
+    depends_on:
+      - backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - HARDCOVER_API_ENDPOINT=https://api.hardcover.app/v1/graphql
+      - TRIBUNE_LOGISTICA_URL=http://tribune_logistica:8000
+      - RUST_LOG=info
+    volumes:
+      - /mnt/private/Serversetup/data/booklegion:/data
+      - /mnt/private/booklegion-staging:/onboard
+      - /mnt/private/booklegion-staging-errors:/errs
+    networks:
+      - web
+
   backend:
     image: lumilukko/tribune_logistica:latest
     container_name: booklegion-tribune_logistica
     depends_on:
       - tribune_dictio
+    environment:
+      - TTS_BACKEND=http
+      - LIBRARY_ROOT=/data
+      - TTS_API_URL=http://booklegion-tribune_dictio:8000/tts
+    env_file:
+      - .env
     volumes:
       - /mnt/private/Serversetup/data/booklegion:/data
       - /mnt/private/Serversetup/configs/booklegion:/config
     labels:
       - "traefik.enable=true"
-
-      # Backend router: /api/*
-      - "traefik.http.routers.booklegion-backend.rule=Host(`book.lumilukko.com`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.booklegion-backend.entrypoints=websecure"
-      - "traefik.http.routers.booklegion-backend.tls=true"
-      - "traefik.http.routers.booklegion-backend.tls.certresolver=letsencrypt"
-
-      # Strip /api prefix
-      - "traefik.http.middlewares.booklegion-strip.stripprefix.prefixes=/api"
-      - "traefik.http.routers.booklegion-backend.middlewares=booklegion-strip"
-
-      # Internal backend port
-      - "traefik.http.services.booklegion-backend.loadbalancer.server.port=8000"
+      # Router for backend
+      - "traefik.http.routers.staging-backend.rule=Host(`book.lumilukko.com`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.staging-backend.entrypoints=websecure"
+      - "traefik.http.routers.staging-backend.tls=true"
+      - "traefik.http.routers.staging-backend.tls.certresolver=letsencrypt"
+      # Service port inside container
+      - "traefik.http.services.staging-backend.loadbalancer.server.port=8000"
     restart: unless-stopped
     networks:
       - web

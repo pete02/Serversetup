@@ -44,7 +44,7 @@ services:
 
 
   staging-frontend:
-    image: lumilukko/lector-staging:latest
+    image: lumilukko/lector-staging:latesta
     container_name: lector-staging
     depends_on:
       - staging-backend
