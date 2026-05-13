@@ -20,6 +20,8 @@ services:
   tribune_dictio:
     image: lumilukko/tribune_dictio
     container_name: booklegion-tribune_dictio
+    environment:
+      - DEBUG=true
     ports:
       - 8888:8000
     volumes:
@@ -32,7 +34,7 @@ services:
 
   onboarder:
     image: lumilukko/tribune_archivum:latest
-    container_name: tribune_archivum
+    container_name: booklegion-tribune_archivum
     depends_on:
       - backend
     restart: unless-stopped
@@ -40,12 +42,12 @@ services:
       - .env
     environment:
       - HARDCOVER_API_ENDPOINT=https://api.hardcover.app/v1/graphql
-      - TRIBUNE_LOGISTICA_URL=http://tribune_logistica:8000
-      - RUST_LOG=info
+      - TRIBUNE_LOGISTICA_URL=http://booklegion-tribune_logistica:8000
+      - RUST_LOG=debug
     volumes:
       - /mnt/private/Serversetup/data/booklegion:/data
-      - /mnt/private/booklegion-staging:/onboard
-      - /mnt/private/booklegion-staging-errors:/errs
+      - /mnt/private/booklegion-onboard:/onboard
+      - /mnt/private/booklegion-onboard-errors:/errs
     networks:
       - web
 
@@ -63,6 +65,8 @@ services:
     volumes:
       - /mnt/private/Serversetup/data/booklegion:/data
       - /mnt/private/Serversetup/configs/booklegion:/config
+      - /mnt/private/onboard-staging:/onboard
+      - /mnt/private/onboard-staging-errors:/errs
     labels:
       - "traefik.enable=true"
       # Router for backend

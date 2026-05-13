@@ -1,0 +1,11 @@
+services:
+  ddns:
+    container_name: PorkbunDDNS
+    image: lumilukko/porkbunddns
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DOMAIN: lumilukko.com
+      INTERVAL: "30"   # seconds between checks
+      TTL: "300"        # should match your Porkbun TTL setting
