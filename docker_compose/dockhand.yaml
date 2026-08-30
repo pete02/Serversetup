@@ -8,3 +8,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /mnt/private/Serversetup/data/dockhand:/app/data
+  registry-push:
+    image: registry:2
+    container_name: registry-push
+    restart: always
+    ports:
+      - "5001:5000"
+    volumes:
+      - /var/lib/docker/registry-push:/var/lib/registry
