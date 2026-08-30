@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
 
   tribune-dictio:
-    image: lumilukko/tribune-dictio:latest
+    image: aria.local:5001/tribune-dictio:latest
     container_name: booklegion-tribune-dictio
     environment:
       - DEBUG=true
