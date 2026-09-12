@@ -47,6 +47,7 @@ services:
     volumes:
       - /mnt/private/Serversetup/data/booklegion:/data
       - /mnt/private/booklegion-onboard:/onboard
+      - /mnt/private/booklegion-onboard-hidden:/onboard-hidden
       - /mnt/private/booklegion-onboard-errors:/errs
     networks:
       - web
