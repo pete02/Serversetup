@@ -1,7 +1,4 @@
-docker compose -f dockhand.yaml down
-docker compose -f traefik.yaml down
-docker compose -f vaultwarden.yaml down
-docker compose -f booklegion.yaml down
-docker compose -f porkbunddns.yaml down
-docker compose -f mongo.yaml down
-docker compose -f ubiqiti.yaml down
+for file in /mnt/server/Serversetup/docker_compose/*.yaml; do
+    echo "Processing $file"
+    docker compose -f "$file" down
+done

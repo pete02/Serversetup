@@ -1,9 +1,6 @@
 docker network create --driver bridge web
-docker compose -f adguard.yaml up -d
-docker compose -f dockhand.yaml up -d
-docker compose -f mongo.yaml up -d
-docker compose -f traefik.yaml up -d
-docker compose -f vaultwarden.yaml up -d
-docker compose -f ubiqiti.yaml up -d
-docker compose -f porkbunddns.yaml up -d
-docker compose -f booklegion.yaml up -d --pull always
+
+for file in /mnt/server/Serversetup/docker_compose/*.yaml; do
+    echo "Processing $file"
+    docker compose -f "$file" up -d 
+done
