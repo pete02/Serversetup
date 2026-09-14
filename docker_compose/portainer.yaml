@@ -10,4 +10,4 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/private/Serversetup/data/portainer:/data
+      - /mnt/server/Serversetup/data/portainer:/data

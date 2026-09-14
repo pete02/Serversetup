@@ -1,4 +1,5 @@
 docker network create --driver bridge web
+docker compose -f adguard.yaml up -d
 docker compose -f dockhand.yaml up -d
 docker compose -f mongo.yaml up -d
 docker compose -f traefik.yaml up -d

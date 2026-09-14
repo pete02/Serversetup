@@ -3,7 +3,7 @@ services:
     image: lumilukko/tribune-logistica-staging:latest
     container_name: tribune-logistica-staging
     volumes:
-      - /mnt/private/Serversetup/data/staging:/data
+      - /mnt/server/Serversetup/data/staging:/data
     environment:
       - TTS_BACKEND=http
       - LIBRARY_ROOT=/data
@@ -36,9 +36,9 @@ services:
       - TRIBUNE_LOGISTICA_URL=http://tribune-logistica-staging:8000
       - RUST_LOG=info
     volumes:
-      - /mnt/private/Serversetup/data/staging:/data
-      - /mnt/private/onboard-staging:/onboard
-      - /mnt/private/onboard-staging-errors:/errs
+      - /mnt/server/Serversetup/data/staging:/data
+      - /mnt/server/onboard-staging:/onboard
+      - /mnt/server/onboard-staging-errors:/errs
     networks:
       - web
 

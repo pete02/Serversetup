@@ -25,7 +25,7 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - /mnt/private/Serversetup/data/audio:/voiceactors
+      - /mnt/server/Serversetup/data/audio:/voiceactors
     devices:
       - nvidia.com/gpu=all
     restart: unless-stopped
@@ -45,10 +45,10 @@ services:
       - TRIBUNE_LOGISTICA_URL=http://booklegion-tribune-logistica:8000
       - RUST_LOG=debug
     volumes:
-      - /mnt/private/Serversetup/data/booklegion:/data
-      - /mnt/private/booklegion-onboard:/onboard
-      - /mnt/private/booklegion-onboard-hidden:/onboard-hidden
-      - /mnt/private/booklegion-onboard-errors:/errs
+      - /mnt/server/Serversetup/data/booklegion:/data
+      - /mnt/server/booklegion-onboard:/onboard
+      - /mnt/server/booklegion-onboard-hidden:/onboard-hidden
+      - /mnt/server/booklegion-onboard-errors:/errs
     networks:
       - web
 
@@ -64,10 +64,10 @@ services:
     env_file:
       - .env
     volumes:
-      - /mnt/private/Serversetup/data/booklegion:/data
-      - /mnt/private/Serversetup/configs/booklegion:/config
-      - /mnt/private/onboard-staging:/onboard
-      - /mnt/private/onboard-staging-errors:/errs
+      - /mnt/server/Serversetup/data/booklegion:/data
+      - /mnt/server/Serversetup/configs/booklegion:/config
+      - /mnt/server/onboard-staging:/onboard
+      - /mnt/server/onboard-staging-errors:/errs
     labels:
       - "traefik.enable=true"
       # Router for backend
