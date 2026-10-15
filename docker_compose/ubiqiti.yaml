@@ -1,39 +1,49 @@
 services:
-  unifi-network-application:
-    image: lscr.io/linuxserver/unifi-network-application:latest
-    container_name: unifi-network-application
-    depends_on:
-      - mongo
+  unifi-os-server:
+    image: giiibates/unifi-os-server:latest
+    container_name: unifi-os-server
+    restart: unless-stopped
+    cgroup: host
+    stop_signal: SIGRTMIN+3
+
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+
     environment:
-      - PUID=0
-      - PGID=0
-      - TZ=Europe/Helsinki
-      - MONGO_USER=unifi
-      - MONGO_PASS=***
-      - MONGO_HOST=mongo
-      - MONGO_PORT=27017
-      - MONGO_DBNAME=unifi
-      - MEM_LIMIT=1024 #optional
-      - MEM_STARTUP=1024 #optional
-      - MONGO_TLS= #optional
-      - MONGO_AUTHSOURCE= #optional
-    volumes:
-      - /mnt/server/Serversetup/data/unifi:/config
+      UOS_SYSTEM_IP: 192.168.88.241
+
     ports:
-      - 8443:8443
-      - 3478:3478/udp
-      - 10001:10001/udp
-      - 8080:8080
-      - 1901:1900/udp #optional
-      - 8843:8843 #optional
-      - 8880:8880 #optional
-      - 6789:6789 #optional
-      - 5514:5514/udp #optional
-    restart: unless-stopped
-  mongo:
-    image: mongo:4.4.18
-    container_name: mongo
+      - "11443:443"
+      - "8080:8080"
+      - "8443:8443"
+      - "8444:8444"
+      - "3478:3478/udp"
+      - "10003:10003/udp"
+      - "5514:5514/udp"
+      - "5671:5671"
+      - "5005:5005"
+      - "6789:6789"
+      - "8880:8880"
+      - "8881:8881"
+      - "8882:8882"
+      - "9543:9543"
+      - "11084:11084"
+
+    tmpfs:
+      - /run:exec
+      - /run/lock
+      - /tmp:exec
+      - /var/lib/journal
+      - /var/opt/unifi/tmp:size=64m
+
     volumes:
-      - /mnt/server/Serversetup/data/mongo/db:/data/db
-      - /mnt/server/Serversetup/data/mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-    restart: unless-stopped
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - /mnt/server/Serversetup/data/unifi/persistent:/persistent
+      - /mnt/server/Serversetup/data/unifi/var-log:/var/log
+      - /mnt/server/Serversetup/data/unifi/data:/data
+      - /mnt/server/Serversetup/data/unifi/srv:/srv
+      - /mnt/server/Serversetup/data/unifi/var-lib-unifi:/var/lib/unifi
+      - /mnt/server/Serversetup/data/unifi/var-lib-postgresql:/var/lib/postgresql
+      - /mnt/server/Serversetup/data/unifi/var-lib-mongodb:/var/lib/mongodb
+      - /mnt/server/Serversetup/data/unifi/etc-rabbitmq-ssl:/etc/rabbitmq/ssl

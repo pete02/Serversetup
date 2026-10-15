@@ -16,3 +16,9 @@ services:
       - "5001:5000"
     volumes:
       - /var/lib/docker/registry-push:/var/lib/registry
+  openspeedtest:
+    image: openspeedtest/latest
+    restart: unless-stopped
+    ports:
+      - "30000:3000"
+      - "30001:3001"

@@ -1,0 +1,53 @@
+
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:16
+    container_name: forgejo
+    restart: unless-stopped
+
+    environment:
+      USER_UID: "1000"
+      USER_GID: "1000"
+      TZ: Europe/Helsinki
+
+      # Public HTTPS URL
+      FORGEJO__server__DOMAIN: git.lumilukko.com
+      FORGEJO__server__ROOT_URL: https://git.lumilukko.com/
+      FORGEJO__server__PROTOCOL: http
+
+      # SSH clone URLs use port 2222 on the host
+      FORGEJO__server__SSH_DOMAIN: git.lumilukko.com
+      FORGEJO__server__SSH_PORT: "2222"
+
+    volumes:
+      - /mnt/server/Serversetup/data/forgejo:/data
+      - /etc/localtime:/etc/localtime:ro
+
+    networks:
+      - web
+
+    ports:
+      # Git over SSH; not needed for HTTPS-only Git operations.
+      - "2222:22"
+
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+
+      # HTTPS router
+      - traefik.http.routers.forgejo.rule=Host(`git.lumilukko.com`)
+      - traefik.http.routers.forgejo.entrypoints=websecure
+      - traefik.http.routers.forgejo.tls=true
+      - traefik.http.routers.forgejo.tls.certresolver=letsencrypt
+      - traefik.http.services.forgejo.loadbalancer.server.port=3000
+
+      # HTTP -> HTTPS redirect
+      - traefik.http.routers.forgejo-http.rule=Host(`git.lumilukko.com`)
+      - traefik.http.routers.forgejo-http.entrypoints=web
+      - traefik.http.routers.forgejo-http.middlewares=forgejo-https
+      - traefik.http.middlewares.forgejo-https.redirectscheme.scheme=https
+
+networks:
+  web:
+    external: true
+
