@@ -47,6 +47,28 @@ services:
       - traefik.http.routers.forgejo-http.middlewares=forgejo-https
       - traefik.http.middlewares.forgejo-https.redirectscheme.scheme=https
 
+  docker-in-docker:
+    image: docker:dind
+    container_name: dind_container
+    privileged: 'true'
+    ports:
+      - "127.0.0.1:2376:2375"
+    command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false']
+    restart: 'unless-stopped'
+
+  runner:
+    image: 'data.forgejo.org/forgejo/runner:13'
+    depends_on:
+      docker-in-docker:
+        condition: service_started
+    container_name: 'forgejo-runner'
+    # User without root privileges, but with access to `./data`.
+    user: 1000:1000
+    volumes:
+       - /mnt/server/Serversetup/data/forgejo/runner:/data
+    restart: 'unless-stopped'
+    command: 'forgejo-runner daemon --config /data/runner-config.yml'
+
 networks:
   web:
     external: true
