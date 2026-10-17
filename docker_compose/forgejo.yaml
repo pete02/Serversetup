@@ -50,10 +50,12 @@ services:
   docker-in-docker:
     image: docker:dind
     container_name: dind_container
+    volumes:
+      - /mnt/server/Serversetup/data/dind:/var/lib/docker
     privileged: 'true'
     ports:
       - "127.0.0.1:2376:2375"
-    command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false']
+    command: ['dockerd', '-H', 'tcp://0.0.0.0:2375', '--tls=false', '--max-concurrent-uploads=1']
     restart: 'unless-stopped'
 
   runner:

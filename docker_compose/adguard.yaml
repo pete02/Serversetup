@@ -9,18 +9,31 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
 
-      # Initial setup wizard
-      - "3001:3000/tcp"
-
-      # Web admin interface
-      - "8081:80/tcp"
-
-      # Optional: DNS-over-TLS
-      # - "853:853/tcp"
-
-      # Optional: DNS-over-QUIC
-      # - "784:784/udp"
+      # Do not publish the web interface directly.
+      # Traefik handles access on its Docker network.
 
     volumes:
       - /mnt/server/Serversetup/data/adguard/work:/opt/adguardhome/work
       - /mnt/server/Serversetup/data/adguard/conf:/opt/adguardhome/conf
+
+    networks:
+      - web
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+
+      # Web admin interface
+      - "traefik.http.routers.adguard.rule=Host(`adguard.lumilukko.com`)"
+      - "traefik.http.routers.adguard.entrypoints=websecure"
+      - "traefik.http.routers.adguard.tls=true"
+      - "traefik.http.routers.adguard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.adguard.middlewares=adguard-allowlist"
+      - "traefik.http.services.adguard.loadbalancer.server.port=80"
+
+      # Only this IP can access the web interface
+      - "traefik.http.middlewares.adguard-allowlist.ipallowlist.sourcerange=192.168.88.239/32"
+
+networks:
+  web:
+    external: true
