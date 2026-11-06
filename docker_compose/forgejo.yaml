@@ -70,6 +70,9 @@ services:
        - /mnt/server/Serversetup/data/forgejo/runner:/data
     restart: 'unless-stopped'
     command: 'forgejo-runner daemon --config /data/runner-config.yml'
+    networks:
+      - web
+
 
 
 

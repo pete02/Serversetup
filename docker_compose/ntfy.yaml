@@ -28,7 +28,7 @@ services:
       - "traefik.http.routers.ntfy.tls=true"
       - "traefik.http.routers.ntfy.tls.certresolver=letsencrypt"
       - "traefik.http.routers.ntfy.middlewares=ntfy-internal"
-      - "traefik.http.middlewares.ntfy-internal.ipallowlist.sourcerange=192.168.88.0/24,10.0.0.0/24"
+      - "traefik.http.middlewares.ntfy-internal.ipallowlist.sourcerange=192.168.88.0/24,10.0.0.0/24,172.0.0.0/8"
       - "traefik.http.services.ntfy.loadbalancer.server.port=80"
 
 networks:
